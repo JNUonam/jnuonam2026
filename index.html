@@ -63,8 +63,8 @@
       margin-bottom: 20px;
     }
     .virtual-queue {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.95);
       line-height: 1.5;
     }
     .btn-join {
@@ -93,13 +93,13 @@
       box-shadow: none !important;
     }
 
-    /* Shown only once the virtual queue becomes active */
-    .incognito-tip {
+    /* Hidden before launch; shown only once the virtual queue becomes active */
+    #incognito-tip {
       display: none;
-      margin-top: 12px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      color: rgba(255, 255, 255, 0.82);
+      margin-top: 8px;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.75);
     }
     .notice {
       font-size: 0.9rem;
@@ -120,12 +120,12 @@
 
     <div class="onasadya-section">
       <div class="onasadya-title">Onasadya</div>
-      <div class="onasadya-time"><strong>6 pm</strong> onwards</div>
+      <div class="onasadya-time"><strong>6 PM</strong> onwards</div>
 
       <div class="virtual-queue">
         <a href="#" target="_self" class="btn-join btn-locked" id="join-btn">Queue not live yet</a>
         <br>
-        <span id="queue-status">Virtual queue will be active from <strong>22<sup>nd</sup> November</strong>.</span>
+        <span id="queue-status">Virtual queue will be active from <strong>22<sup>nd</sup> November. Stay tuned!</strong>.</span>
         <div id="incognito-tip">If you get a "Server busy" or token error, please open this page in an Incognito tab and try again.</div>
       </div>
     </div>
@@ -136,7 +136,7 @@
 
   <script>
     // Web app booking URL and IST launch timestamp
-    const BOOKING_URL = https://script.google.com/macros/s/AKfycbxkJ1DqUM11FGDtJPPsRPxPjY7okj1R7f8A7-5VQj2JyfuoliwPfgDTiszDyLRBQbLd6g/exec";
+    const BOOKING_URL = "https://script.google.com/macros/s/AKfycbwlVkchkcvaDIGU8B5xuEI17Em4pzbVGqnN3XheAHXI2gNqUvLuNGMObMSA1FHax_eR/exec";
     const launchDate = new Date("2026-11-22T18:00:00+05:30").getTime();
 
     const btn = document.getElementById("join-btn");
@@ -149,7 +149,7 @@
         btn.href = BOOKING_URL;
         btn.classList.remove("btn-locked");
         btn.innerText = "Join Virtual Queue";
-        statusSpan.innerHTML = "Virtual queue is <strong>active now!</strong>";
+        statusSpan.innerHTML = 'Virtual queue is <strong style="font-size: 1.15rem; color: #facc15;">active now!</strong>';
         incognitoTip.style.display = "block";
         return true;
       }
