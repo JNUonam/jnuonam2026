@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JNU Onam 2026 - Virtual Queue</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #4c1d95, #1e1b4b);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      box-sizing: border-box;
+    }
+    .container {
+      text-align: center;
+      padding: 35px 25px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      box-sizing: border-box;
+    }
+    .onam-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    .date-location {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+    .onasadya-section {
+      padding: 20px 15px;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      display: block;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .onasadya-title {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: #facc15;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+    .onasadya-time {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 20px;
+    }
+    .virtual-queue {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.5;
+    }
+    .btn-join {
+      background-color: #facc15;
+      color: #1a1a1a;
+      font-size: 1.05rem;
+      font-weight: bold;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.2s ease;
+    }
+    .btn-join:hover { opacity: 0.9; }
+    .btn-locked {
+      background-color: #94a3b8 !important;
+      color: #475569 !important;
+      cursor: not-allowed !important;
+      pointer-events: none;
+      box-shadow: none !important;
+    }
+
+    /* Shown only once the virtual queue becomes active */
+    .incognito-tip {
+      display: none;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .notice {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 15px;
+      line-height: 1.4;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .footer { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="onam-title">JNU ONAM 2026</div>
+    <div class="date-location">23<sup>rd</sup> November<br>Sabarmati Lawns</div>
+
+    <div class="onasadya-section">
+      <div class="onasadya-title">Onasadya</div>
+      <div class="onasadya-time"><strong>6 pm</strong> onwards</div>
+
+      <div class="virtual-queue">
+        <a href="#" target="_self" class="btn-join btn-locked" id="join-btn">Queue not live yet</a>
+        <br>
+        <span id="queue-status">Virtual queue will be active from <strong>22<sup>nd</sup> November</strong>.</span>
+        <div id="incognito-tip">If you get a "Server busy" or token error, please open this page in an Incognito tab and try again.</div>
+      </div>
+    </div>
+
+    <div class="notice"><strong>A food coupon is mandatory for entry.</strong><br>Please collect yours in advance.</div>
+    <div class="footer"><p>See you there! 🌸</p></div>
+  </div>
+
+  <script>
+    // Web app booking URL and IST launch timestamp
+    const BOOKING_URL = https://script.google.com/macros/s/AKfycbxkJ1DqUM11FGDtJPPsRPxPjY7okj1R7f8A7-5VQj2JyfuoliwPfgDTiszDyLRBQbLd6g/exec";
+    const launchDate = new Date("2026-11-22T18:00:00+05:30").getTime();
+
+    const btn = document.getElementById("join-btn");
+    const statusSpan = document.getElementById("queue-status");
+    const incognitoTip = document.getElementById("incognito-tip");
+
+    // Unlocks the booking button and displays the Incognito tip once launch time is reached
+    function checkLaunchStatus() {
+      if (Date.now() >= launchDate) {
+        btn.href = BOOKING_URL;
+        btn.classList.remove("btn-locked");
+        btn.innerText = "Join Virtual Queue";
+        statusSpan.innerHTML = "Virtual queue is <strong>active now!</strong>";
+        incognitoTip.style.display = "block";
+        return true;
+      }
+      incognitoTip.style.display = "none";
+      return false;
+    }
+
+    // Run immediately on page load, then poll every second until live
+    if (!checkLaunchStatus()) {
+      const timer = setInterval(function() {
+        if (checkLaunchStatus()) {
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
